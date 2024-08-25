@@ -97,7 +97,13 @@
 <body>
 <form action="/maincalendar" method="post">
     <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" sec:authentication="name" href="#">님의 캘린더</a>
+        <a class="nave-link">DoFriend</a> <!-- maincalendar로 다시 오게끔 -->
+        <a class="nav-link">
+            <span th:text="${#authentication.principal.name}">이름</span>님의 달력
+        </a>
+        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/mypage/detail.do/{memberId}(memberId=${memberVo.memberId})}">
+            마이페이지
+        </a>
         <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/logout.do}">
             로그아웃
         </a>

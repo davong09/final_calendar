@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Page</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrQkz7K2L6/FUeWcTjJ3arE1p2pSRbGJzOe8hOLRJ9Ue4uA+U6fyV3L6E8IlRKK9tNTyyb5l+Y5JK+u2Cw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+<div class="container">
+    <div class="profile-card">
+<!--        <div class="profile-image">-->
+<!--            <img th:src="@{${member.image} ?: '/images/default-profile.png'}" alt="Profile Image">-->
+<!--        </div>-->
+        <div class="profile-info">
+            <h2 th:text="${member.name}"></h2>
+            <p><strong>Email:</strong> <span th:text="${member.email}"></span></p>
+            <p><strong>Gender:</strong> <span th:text="${member.gender}"></span></p>
+            <p><strong>Birth Date:</strong> <span th:text="${#dates.format(member.birth, 'yyyy-MM-dd')}"></span></p>
+            <p><strong>Bio:</strong> <span th:text="${member.bio}"></span></p>
+            <p><strong>Social Login:</strong>
+                <span th:if="${member.social == 1}" th:text="'소셜 로그인 계정'">소셜 로그인 계정</span>
+                <span th:if="${member.social == 0}" th:text="'일반 계정'">일반 계정</span>
+            </p>
+            <p><strong>Code ID:</strong> <span th:text="${member.codeId}"></span></p>
+            <a href="/member/update" class="btn-edit">프로필 수정</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

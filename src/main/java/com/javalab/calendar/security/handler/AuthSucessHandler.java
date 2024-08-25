@@ -1,11 +1,14 @@
 package com.javalab.calendar.security.handler;
 
+import com.javalab.calendar.dto.CustomUser;
+import com.javalab.calendar.vo.MemberVo;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +36,13 @@ public class AuthSucessHandler extends SimpleUrlAuthenticationSuccessHandler {
                 targetUrl = "/member/list.do"; // admin인 경우
                 break;
             }
+        }
+
+        // CustomUser에서 MemberVo를 가져와 세션에 저장
+        if (authentication.getPrincipal() instanceof CustomUser) {
+            CustomUser customUser = (CustomUser) authentication.getPrincipal();
+            MemberVo memberVo = customUser.getMemberVo(); // CustomUser에서 MemberVo를 직접 가져옴
+            request.getSession().setAttribute("memberVo", memberVo);
         }
 
         setDefaultTargetUrl(targetUrl);

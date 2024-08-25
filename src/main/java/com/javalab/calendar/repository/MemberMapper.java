@@ -36,5 +36,7 @@ public interface MemberMapper {
     // 비밀번호 및 소셜 로그인 상태 수정
     void modifyPasswordAndSocialStatus(@Param("email") String email, @Param("encodedPassword") String encodedPassword);
 
+    // 회원 상세 정보 보기(마이페이지)
+    MemberVo getMember(String memberId);
 
 }

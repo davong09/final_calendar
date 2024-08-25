@@ -115,4 +115,19 @@
         WHERE email = #{email}
     </update>
 
+    <!-- 회원 상세 정보 조회 -->
+    <select id="getMember" resultType="MemberVo">
+        select memberId,
+        code_Id,
+        email,
+        name,
+        gender,
+        birth,
+        social,
+        image,
+        bio
+        from member
+        where memberId = #{memberId}
+    </select>
+
 </mapper>
