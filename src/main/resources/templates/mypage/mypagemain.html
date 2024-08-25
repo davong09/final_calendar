@@ -1,31 +1,208 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>My Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrQkz7K2L6/FUeWcTjJ3arE1p2pSRbGJzOe8hOLRJ9Ue4uA+U6fyV3L6E8IlRKK9tNTyyb5l+Y5JK+u2Cw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          integrity="sha512-Fo3rlrQkz7K2L6/FUeWcTjJ3arE1p2pSRbGJzOe8hOLRJ9Ue4uA+U6fyV3L6E8IlRKK9tNTyyb5l+Y5JK+u2Cw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <style>
+        /* Inline CSS for demonstration */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: #f8f9fa;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Ensure it is above the sidebar */
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 60px; /* Height of the navbar */
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .container {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .container {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 250px; /* Same as sidebar width */
+        }
+
+        .profile-info table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .profile-info table, .profile-info th, .profile-info td {
+            border: 1px solid #ddd;
+        }
+
+        .profile-info th, .profile-info td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        .profile-info th {
+            background-color: #f4f4f4;
+        }
+
+        .profile-info {
+    padding: 0; /* 여백 제거 */
+    margin: 0; /* 여백 제거 */
+}
+
+.profile-info table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0; /* 여백 제거 */
+}
+
+.profile-info table, .profile-info th, .profile-info td {
+    border: 1px solid #ddd;
+}
+
+.profile-info th, .profile-info td {
+    padding: 10px; /* 줄이기 */
+    text-align: left;
+}
+
+.profile-info th {
+    background-color: #f4f4f4;
+    width: 20%; /* 헤더 크기 조절 */
+}
+
+.profile-info td {
+    width: 80%; /* 데이터 부분 크기 조절 */
+}
+
+
+        .btn-edit {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #0066ff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <div class="profile-card">
-<!--        <div class="profile-image">-->
-<!--            <img th:src="@{${member.image} ?: '/images/default-profile.png'}" alt="Profile Image">-->
-<!--        </div>-->
+<nav class="navbar navbar-light bg-light">
+    <a class="nav-link">DoFriend</a> <!-- maincalendar로 다시 오게끔 -->
+    <a class="nav-link">
+        <span th:text="${#authentication.principal.name}">이름</span>님의 정보
+    </a>
+    <a class="nav-link" sec:authorize="isAuthenticated()"
+       th:href="@{/mypage/detail.do/{memberId}(memberId=${memberVo.memberId})}">
+        마이페이지
+    </a>
+    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/logout.do}">
+        로그아웃
+    </a>
+</nav>
+
+<div class="main-container">
+    <div class="sidebar">
+        <ul>
+            <li><a th:href="@{/mypage/detail.do/{memberId}(memberId=${memberVo.memberId})}">회원정보</a></li>
+            <li><a th:href="@{/member/update.do/{memberId}(memberId=${memberVo.memberId})}">회원수정</a></li>
+            <li><a href="#">캘린더관리</a></li>
+            <li><a href="#">일정관리</a></li>
+            <!-- Add more items as needed -->
+        </ul>
+    </div>
+
+    <div class="container">
         <div class="profile-info">
-            <h2 th:text="${member.name}"></h2>
-            <p><strong>Email:</strong> <span th:text="${member.email}"></span></p>
-            <p><strong>Gender:</strong> <span th:text="${member.gender}"></span></p>
-            <p><strong>Birth Date:</strong> <span th:text="${#dates.format(member.birth, 'yyyy-MM-dd')}"></span></p>
-            <p><strong>Bio:</strong> <span th:text="${member.bio}"></span></p>
-            <p><strong>Social Login:</strong>
-                <span th:if="${member.social == 1}" th:text="'소셜 로그인 계정'">소셜 로그인 계정</span>
-                <span th:if="${member.social == 0}" th:text="'일반 계정'">일반 계정</span>
-            </p>
-            <p><strong>Code ID:</strong> <span th:text="${member.codeId}"></span></p>
-            <a href="/member/update" class="btn-edit">프로필 수정</a>
+            <h2 th:text="${memberVo.name}"의 회원 정보></h2>
+            <table>
+                <tr>
+                    <th>아이디</th>
+                    <td th:text="${memberVo.memberId}"></td>
+                </tr>
+                <tr>
+                    <th>이름</th>
+                    <td th:text="${memberVo.name}"></td>
+                </tr>
+                <tr>
+                    <th>이메일</th>
+                    <td th:text="${memberVo.email}"></td>
+                </tr>
+                <tr>
+                    <th>친구코드</th>
+                    <td th:text="${memberVo.code_id}"></td>
+                </tr>
+                <tr>
+                    <th>성별</th>
+                    <td th:text="${memberVo.gender}"></td>
+                </tr>
+                <tr>
+                    <th>생년월일</th>
+                    <td th:text="${#dates.format(memberVo.birth, 'yyyy-MM-dd')}"></td>
+                </tr>
+                <tr>
+                    <th>이미지</th>
+                    <td th:text="${memberVo.image != null ? memberVo.image : '이미지 없음'}"></td>
+                </tr>
+                <tr>
+                    <th>한줄소개</th>
+                    <td th:text="${memberVo.bio}"></td>
+                </tr>
+                <tr>
+                    <th>소셜 로그인</th>
+                    <td>
+                        <span th:if="${memberVo.social == 1}" th:text="'소셜 로그인 계정'">소셜 로그인 계정</span>
+                        <span th:if="${memberVo.social == 0}" th:text="'일반 계정'">일반 계정</span>
+                    </td>
+                </tr>
+            </table>
+            <a th:href="@{/member/update.do/{memberId}(memberId=${memberVo.memberId})}" class="btn-edit">프로필 수정</a>
         </div>
     </div>
 </div>
+
 </body>
 </html>

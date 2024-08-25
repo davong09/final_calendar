@@ -52,5 +52,6 @@ public class MemberFormDto {
 //    private MultipartFile image;
 
     // 자기소개 필드 추가
+    @Size(min = 2, max = 100, message = "한줄 소개는 2자 이상 100자 이내로 입력하세요.")
     private String bio;
 }

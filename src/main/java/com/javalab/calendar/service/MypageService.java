@@ -7,7 +7,6 @@ import java.util.List;
 
 /**
  * MypageService 인터페이스
- *
  */
 public interface MypageService {
 	// 회원 상세 보기

@@ -108,13 +108,17 @@ public class MemberController {
             if (memberVo != null) {
                 MemberFormDto memberFormDto = new MemberFormDto();
                 memberFormDto.setMemberId(memberVo.getMemberId());
+                memberFormDto.setPassword(memberVo.getPassword());
                 memberFormDto.setName(memberVo.getName());
                 memberFormDto.setEmail(memberVo.getEmail());
+                memberFormDto.setGender(memberVo.getGender());
+                memberFormDto.setBirth(memberVo.getBirth());
+                memberFormDto.setBio(memberVo.getBio());
                 // 필요한 필드를 더 설정합니다.
 
                 model.addAttribute("memberFormDto", memberFormDto);
             } else {
-                return "redirect:/member/list.do"; // 존재하지 않는 회원의 경우 리다이렉트
+                return "redirect:mypage/mypagemain"; // 존재하지 않는 회원의 경우 리다이렉트
             }
         }
         return "member/memberUpdate"; // 수정 폼 페이지로 이동

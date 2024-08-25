@@ -35,11 +35,13 @@ public class MypageController {
     /**
      * 회원 내용 보기 메소드
      */
+
     @GetMapping("/detail.do/{memberId}")
     public String getMember(@PathVariable("memberId") String memberId, Model model) {
         log.info("MyapgeController getMember");
         MemberVo memberVo = mypageService.getMember(memberId);
+        log.info("MemberVo: " + memberVo); // MemberVo 데이터 확인
         model.addAttribute("memberVo", memberVo);
-        return "mypage/mypagemain"; // jsp 이름
+        return "mypage/mypagemain";
     }
 }
