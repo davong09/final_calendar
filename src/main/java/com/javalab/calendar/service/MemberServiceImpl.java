@@ -1,5 +1,6 @@
 package com.javalab.calendar.service;
 
+import com.javalab.calendar.dto.GenderRatioDTO;
 import com.javalab.calendar.dto.MemberFormDto;
 import com.javalab.calendar.repository.MemberMapper;
 import com.javalab.calendar.service.MemberService;
@@ -101,5 +102,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMember(String memberId) {
         memberMapper.delete(memberId);
+    }
+
+    @Override
+    public GenderRatioDTO getGenderRatio() {
+        return null;
     }
 }

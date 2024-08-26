@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 성별 통계</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <style>
+        .container {
+            width: 50%;
+            margin: auto;
+            text-align: center;
+        }
+
+        .bar-chart {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 300px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            position: relative;
+        }
+
+        .bar {
+            width: 30%;
+            text-align: center;
+            font-weight: bold;
+            color: #000; /* 퍼센트 표시 색상 */
+            position: relative;
+        }
+
+        .bar.male {
+            background-color: #3498db;
+            height: [[${genderRatio.malePercentage}]]%;
+        }
+
+        .bar.female {
+            background-color: #e74c3c;
+            height: [[${genderRatio.femalePercentage}]]%;
+        }
+
+        /* 퍼센트 값 막대 하단에 고정 */
+        .bar div {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+        }
+
+        .label-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .label {
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>회원 성별 통계</h2>
+    <div class="bar-chart">
+        <div class="bar male">
+            <div>[[${genderRatio.malePercentage}]]%</div>
+        </div>
+        <div class="bar female">
+            <div>[[${genderRatio.femalePercentage}]]%</div>
+        </div>
+    </div>
+    <!-- 레이블을 막대 아래에 배치 -->
+    <div class="label-container">
+        <div class="label" style="color: #3498db;">Male</div>
+        <div class="label" style="color: #e74c3c;">Female</div>
+    </div>
+</div>
+</body>
+</html>
