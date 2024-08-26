@@ -18,7 +18,7 @@ public class CalendarController {
     @Autowired
     private CalendarService calendarService;
 
-    // 메인 달력 페이지 표시
+    // 메인 달력 페이지 표시 ~
     @GetMapping
     public String showCalendar(Model model) {
         // 현재 로그인한 사용자 정보를 가져옵니다.
