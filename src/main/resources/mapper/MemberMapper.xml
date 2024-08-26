@@ -95,9 +95,7 @@
         password = #{password},
         name = #{name},
         email = #{email},
-        birth = #{birth},
         gender = #{gender},
-        image = #{image},
         birth = #{birth},
         bio = #{bio},
         social = #{social}

@@ -166,8 +166,9 @@ public class MemberController {
 
         memberFormDto.setMemberId(memberId);
         memberService.updateMember(memberFormDto);
-
-        return "redirect:/mypage/mypagemain"; // 회원 정보 페이지 등으로 리다이렉트할 URL
+        log.info("memberForm" + memberFormDto);
+        log.info("mypage로 이동이 안 되는건가?");
+        return "redirect:mypage/mypagemain"; // 회원 정보 페이지 등으로 리다이렉트할 URL
     }
 
 
