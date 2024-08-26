@@ -1,8 +1,10 @@
 package com.javalab.calendar.controller;
 
 import com.javalab.calendar.dto.CustomUser;
+import com.javalab.calendar.dto.GenderRatioDTO;
 import com.javalab.calendar.dto.MemberFormDto;
 import com.javalab.calendar.service.MemberService;
+import com.javalab.calendar.service.UserService;
 import com.javalab.calendar.vo.MemberVo;
 import com.javalab.calendar.vo.Role;
 import jakarta.validation.Valid;
@@ -25,7 +27,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Log4j2
 public class MemberController {
-
+    private final UserService userService;
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
@@ -35,6 +37,14 @@ public class MemberController {
         List<MemberVo> memberList = memberService.findAllMembers();
         model.addAttribute("memberList", memberList);
         return "member/memberList"; // Thymeleaf 뷰의 이름, 위의 HTML 파일에 해당
+    }
+
+    // 회원 성비 통계 조회
+    @GetMapping("/statistics.do")
+    public String getStatistics(Model model) {
+        GenderRatioDTO genderRatio = userService.getGenderRatio();
+        model.addAttribute("genderRatio", genderRatio);
+        return "member/statistics"; // 성비 통계 페이지
     }
 
     // 회원 가입 화면
@@ -142,7 +152,6 @@ public class MemberController {
 
         return "redirect:/member/profile.do"; // 회원 정보 페이지 등으로 리다이렉트할 URL
     }
-
 
     // 카카오 소셜 로그인 사용자 비밀번호 변경 화면
     @GetMapping("/modify.do")
