@@ -4,7 +4,7 @@
       layout:decorate="~{layout/layout.html}">
 
 <head>
-    <title layout:fragment="title">회원 성별 통계</title>
+    <title layout:fragment="title">회원 통계</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .container {
@@ -28,11 +28,11 @@
             width: 45%;
             text-align: center;
             font-weight: bold;
-            color: #fff; /* 텍스트 색상 */
+            color: #fff;
             position: relative;
             border-radius: 5px;
-            margin: 0 10px;
-            transition: background-color 0.3s ease;
+            margin: 0 2%;
+            transition: opacity 0.3s ease;
         }
 
         .bar:hover {
@@ -41,12 +41,10 @@
 
         .bar.male {
             background-color: #3498db;
-            height: [[${genderRatio.malePercentage}]]%;
         }
 
         .bar.female {
             background-color: #e74c3c;
-            height: [[${genderRatio.femalePercentage}]]%;
         }
 
         .bar div {
@@ -81,23 +79,85 @@
         .label.female {
             color: #e74c3c;
         }
+
+        /* 나이대 통계 스타일 */
+        .age-chart {
+            margin-top: 40px;
+        }
+
+        .age-bar {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
+            position: relative;
+            border-radius: 5px;
+            margin: 0 1%;
+            background-color: #8e44ad;
+        }
+
+        .age-bar div {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 3px 6px;
+            border-radius: 3px;
+        }
+
+        .age-label-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .age-label {
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+        }
     </style>
 </head>
 
 <div layout:fragment="content">
     <div class="container">
-        <h3 layout:fragment="body-title">회원 성별 통계</h3>
+        <h3 layout:fragment="body-title">회원 통계</h3>
+
+        <!-- 성별 통계 -->
+        <h4>성별 통계</h4>
         <div class="bar-chart">
-            <div class="bar male">
-                <div>[[${genderRatio.malePercentage}]]%</div>
+            <div class="bar male" th:style="'height: ' + ${genderRatio.malePercentage} + '%'">
+                <div th:text="${genderRatio.malePercentage} + '%'"></div>
             </div>
-            <div class="bar female">
-                <div>[[${genderRatio.femalePercentage}]]%</div>
+            <div class="bar female" th:style="'height: ' + ${genderRatio.femalePercentage} + '%'">
+                <div th:text="${genderRatio.femalePercentage} + '%'"></div>
             </div>
         </div>
         <div class="label-container">
             <div class="label male">Male</div>
             <div class="label female">Female</div>
+        </div>
+
+        <!-- 나이대 통계 -->
+        <h4 class="age-chart">나이대 통계</h4>
+        <div class="bar-chart">
+            <div class="age-bar" th:each="ageGroup, iterStat : ${ageStatistics.ageGroups}"
+                 th:style="'height: ' + ${ageGroup} + '%'">
+                <div th:text="${ageStatistics.ageGroupPercentages[iterStat.index]} + '%'"></div>
+            </div>
+        </div>
+        <div class="age-label-container">
+            <div class="age-label">10대 이하</div>
+            <div class="age-label">10대</div>
+            <div class="age-label">20대</div>
+            <div class="age-label">30대</div>
+            <div class="age-label">40대</div>
+            <div class="age-label">50대 이상</div>
         </div>
     </div>
 </div>

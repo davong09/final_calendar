@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+
+<head>
+    <meta charset="UTF-8">
+    <title layout:fragment="title">카테고리 목록</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        .table thead th {
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .profile-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<div layout:fragment="content">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center action-buttons">
+            <h3 layout:fragment="body-title">카테고리 목록</h3>
+            <!-- 카테고리 등록 버튼 추가 -->
+            <a th:href="@{/category/create}" class="btn btn-primary">카테고리 등록</a>
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>카테고리 이름</th>
+                <th>수정</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category : ${categories}">
+                <td th:text="${category.categoryId}"></td>
+                <td th:text="${category.categoryName}"></td>
+                <td>
+                    <a th:href="@{/category/update/{id}(id=${category.categoryId})}" class="btn btn-sm btn-warning">수정</a>
+                    <form th:action="@{/category/delete/{id}(id=${category.categoryId})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger">삭제</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 스크립트 파일 포함 -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

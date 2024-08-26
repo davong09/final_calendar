@@ -3,6 +3,7 @@ package com.javalab.calendar.controller;
 import com.javalab.calendar.dto.CustomUser;
 import com.javalab.calendar.dto.GenderRatioDTO;
 import com.javalab.calendar.dto.MemberFormDto;
+import com.javalab.calendar.dto.UserStatisticsDTO;
 import com.javalab.calendar.service.MemberService;
 import com.javalab.calendar.service.UserService;
 import com.javalab.calendar.vo.MemberVo;
@@ -40,12 +41,17 @@ public class MemberController {
         return "member/memberList"; // Thymeleaf 뷰의 이름, 위의 HTML 파일에 해당
     }
 
-    // 회원 성비 통계 조회
+    // 회원 성비 및 나이대 통계 조회
     @GetMapping("/statistics.do")
     public String getStatistics(Model model) {
         GenderRatioDTO genderRatio = userService.getGenderRatio();
+        UserStatisticsDTO ageStatistics = userService.getAgeStatistics(); // 나이대 통계 조회
+
         model.addAttribute("genderRatio", genderRatio);
-        return "member/statistics"; // 성비 통계 페이지
+        model.addAttribute("ageGroupPercentages", ageStatistics.getAgeGroupPercentages());
+        model.addAttribute("ageStatistics", ageStatistics); // ageStatistics 객체를 모델에 추가
+
+        return "member/statistics"; // 성비 및 나이대 통계 페이지
     }
 
     // 회원 가입 화면

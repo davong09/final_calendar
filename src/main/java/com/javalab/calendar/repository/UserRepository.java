@@ -24,4 +24,10 @@ public class UserRepository {
         String sql = "SELECT COUNT(*) FROM member WHERE gender = '여자'";
         return jdbcTemplate.queryForObject(sql, Long.class);
     }
+
+    // 나이 범위에 따른 사용자 수를 가져오는 메소드
+    public int countByAgeRange(int minAge, int maxAge) {
+        String sql = "SELECT COUNT(*) FROM member WHERE (EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth)) BETWEEN ? AND ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, minAge, maxAge);
+    }
 }
