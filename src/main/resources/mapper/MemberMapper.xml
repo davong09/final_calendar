@@ -102,9 +102,16 @@
         WHERE member_id = #{memberId}
     </update>
 
-    <!-- 회원 삭제 -->
-    <delete id="delete" parameterType="string">
-        DELETE FROM member WHERE member_id = #{memberId}
+    <!-- 자식 데이터 삭제 -->
+    <delete id="deleteRolesByMemberId" parameterType="String">
+        DELETE FROM member_role
+        WHERE member_id = #{memberId}
+    </delete>
+
+    <!-- 부모 데이터 삭제 -->
+    <delete id="deleteMember" parameterType="String">
+        DELETE FROM member
+        WHERE member_id = #{memberId}
     </delete>
 
     <!-- 비밀번호 및 소셜 로그인 상태 수정 -->

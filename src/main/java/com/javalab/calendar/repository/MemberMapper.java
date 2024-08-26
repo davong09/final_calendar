@@ -1,6 +1,7 @@
 package com.javalab.calendar.repository;
 
 import com.javalab.calendar.vo.MemberVo;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,8 +31,11 @@ public interface MemberMapper {
     // 회원 정보 업데이트
     void update(MemberVo member);
 
-    // 회원 삭제
-    void delete(@Param("memberId") String memberId);
+    // 자식 데이터 삭제
+    void deleteRolesByMemberId(String memberId);
+
+    // 부모 데이터 삭제
+    void deleteMember(String memberId);
 
     // 비밀번호 및 소셜 로그인 상태 수정
     void modifyPasswordAndSocialStatus(@Param("email") String email, @Param("encodedPassword") String encodedPassword);

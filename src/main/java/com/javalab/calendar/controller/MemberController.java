@@ -196,4 +196,22 @@ public class MemberController {
         redirectAttributes.addFlashAttribute("result", "비밀번호 변경 성공");
         return "redirect:/"; // 비밀번호 변경 후 리다이렉트할 URL을 선택합니다.
     }
+
+    /**
+     * 로그인한 사용자 자신의 계정을 삭제하는 메소드
+     */
+    @PostMapping("/delete")
+    public String deleteMember(@AuthenticationPrincipal CustomUser customUser, RedirectAttributes redirectAttributes) {
+        String memberId = customUser.getUsername(); // 현재 로그인한 사용자의 ID 가져오기
+        log.info("Deleting member with ID: {}", memberId);
+
+        // 회원 삭제
+        memberService.deleteMember(memberId);
+
+        // 로그아웃 처리 등 후속 작업 필요
+        redirectAttributes.addFlashAttribute("message", "계정이 성공적으로 삭제되었습니다.");
+
+        // 삭제 후 로그아웃 및 홈 페이지로 리다이렉트
+        return "redirect:/member/logout.do";
+    }
 }

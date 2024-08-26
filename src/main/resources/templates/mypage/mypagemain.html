@@ -151,6 +151,20 @@
             <li><a th:href="@{/member/update.do/{memberId}(memberId=${memberVo.memberId})}">회원수정</a></li>
             <li><a href="#">캘린더관리</a></li>
             <li><a href="#">일정관리</a></li>
+            <li>
+                <a href="#" class="delete-link" onclick="confirmDelete(event)">회원 탈퇴</a>
+            </li>
+            <form id="deleteForm" th:action="@{/member/delete}" method="post" style="display:none;">
+                <button type="submit">회원 탈퇴</button>
+            </form>
+            <script>
+                function confirmDelete(event) {
+                    event.preventDefault(); // 링크의 기본 동작을 막습니다.
+                    if (confirm("정말로 계정을 삭제하시겠습니까?")) {
+                        document.getElementById('deleteForm').submit(); // 폼 제출
+                    }
+                }
+            </script>
             <!-- Add more items as needed -->
         </ul>
     </div>

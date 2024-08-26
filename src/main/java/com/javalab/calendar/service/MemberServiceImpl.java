@@ -99,9 +99,13 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.update(memberVo);
     }
 
+    @Transactional
     @Override
     public void deleteMember(String memberId) {
-        memberMapper.delete(memberId);
+        // 자식 데이터 삭제
+        memberMapper.deleteRolesByMemberId(memberId);
+        // 부모 데이터 삭제
+        memberMapper.deleteMember(memberId);
     }
 
     @Override
