@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.javalab.calendar.repository.CalendarMapper">
-
+    <!-- @author sujin-->
     <!-- 일정 추가 -->
     <insert id="addEvent" parameterType="com.javalab.calendar.vo.CalendarVo">
         INSERT INTO event (

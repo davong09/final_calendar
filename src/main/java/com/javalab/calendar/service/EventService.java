@@ -3,7 +3,9 @@ package com.javalab.calendar.service;
 import com.javalab.calendar.vo.EventVo;
 
 import java.util.List;
-
+/*
+ * @author sujin
+ */
 public interface EventService {
     void createEvent(EventVo eventVo);  // 이벤트 생성
     List<EventVo> getAllEvents();       // 모든 이벤트 조회

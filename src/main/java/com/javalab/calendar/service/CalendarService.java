@@ -3,7 +3,9 @@ package com.javalab.calendar.service;
 import com.javalab.calendar.vo.CalendarVo;
 
 import java.util.List;
-
+/*
+ * @author sujin
+ */
 public interface CalendarService {
     void addEvent(CalendarVo calendarVo);
     List<CalendarVo> getAllEvents();

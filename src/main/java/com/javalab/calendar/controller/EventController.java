@@ -12,6 +12,10 @@ import java.util.List;
 @RequestMapping("/api/events")
 public class EventController {
 
+    /*
+     * @author sujin
+     */
+
     @Autowired
     private EventService eventService;
 

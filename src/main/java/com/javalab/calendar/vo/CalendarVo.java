@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 /**
  * 캘린더 도메인 클래스
+ * @author sujin
  */
 @AllArgsConstructor
 @NoArgsConstructor

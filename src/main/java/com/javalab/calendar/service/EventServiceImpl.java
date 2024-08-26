@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+/*
+ * @author sujin
+ */
 @Service
 public class EventServiceImpl implements EventService {
 

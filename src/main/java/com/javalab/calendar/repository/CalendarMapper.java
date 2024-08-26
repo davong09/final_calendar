@@ -6,6 +6,9 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * @author sujin
+ */
 @Mapper
 public interface CalendarMapper {
     void addEvent(CalendarVo calendarVo);

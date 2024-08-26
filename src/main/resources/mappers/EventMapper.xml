@@ -4,6 +4,8 @@
 
 <mapper namespace="com.javalab.calendar.mapper.EventMapper">
 
+<!-- @author sujin-->
+
     <!-- 이벤트 추가 -->
     <insert id="createEvent" parameterType="com.javalab.calendar.vo.EventVo">
         INSERT INTO EVENT (
