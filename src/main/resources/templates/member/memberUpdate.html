@@ -1,18 +1,129 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout.html}">
-
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="utf-8" />
-    <title layout:fragment="title">회원 정보 수정</title>
+    <meta charset="UTF-8">
+    <title>회원 정보 수정</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background-color: #f8f9fa;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .main-container {
+            display: flex;
+            margin-top: 60px;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .container {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 250px;
+        }
+        .profile-info {
+            padding: 0;
+            margin: 0;
+        }
+        .profile-info form {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn-edit {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #0066ff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-edit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        function validateForm() {
+            // 여기에 폼 유효성 검사 로직 추가
+            return true; // 유효성 검사 통과 시
+        }
+    </script>
 </head>
+<body>
+<nav class="navbar navbar-light bg-light">
+    <a class="nav-link" th:href="@{/maincalendar}">DoFriend</a>
+    <a class="nav-link">
+        <span th:text="${#authentication.principal.name}">이름</span>님의 정보 수정
+    </a>
+    <a class="nav-link" sec:authorize="isAuthenticated()"
+       th:href="@{/mypage/detail.do/{memberId}(memberId=${memberFormDto.memberId})}">
+        마이페이지
+    </a>
+    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/logout.do}">
+        로그아웃
+    </a>
+</nav>
 
-<div layout:fragment="content">
+<div class="main-container">
+    <div class="sidebar">
+        <ul>
+            <li><a href="#">회원정보</a></li>
+            <li><a href="#">회원수정</a></li>
+            <li><a href="#">캘린더관리</a></li>
+            <li><a href="#">일정관리</a></li>
+            <!-- Add more items as needed -->
+        </ul>
+    </div>
+
     <div class="container">
-        <h3 layout:fragment="body-title">회원 정보 수정</h3>
-        <div class="mt-5">
-            <form th:action="@{/member/update.do}" th:object="${memberFormDto}" method="post">
+        <div class="profile-info">
+            <h2>회원 정보 수정</h2>
+            <form th:action="@{/member/update.do/{memberId}(memberId=${memberFormDto.memberId})}" th:object="${memberFormDto}" method="post" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="memberId">아이디</label>
                     <input type="text" id="memberId" th:field="*{memberId}" class="form-control" readonly />
@@ -32,8 +143,34 @@
                     <input type="email" id="email" th:field="*{email}" class="form-control" />
                     <small class="text-danger" th:if="${errorMap != null and errorMap.containsKey('email')}" th:text="${errorMap.get('email')}"></small>
                 </div>
-                <button type="submit" class="btn btn-primary mt-1">수정</button>
+                <div class="form-group">
+                    <label>성별</label>
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="male" th:field="*{gender}" value="남자" />
+                            <label class="form-check-label" for="male">남자</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="female" th:field="*{gender}" value="여자" />
+                            <label class="form-check-label" for="female">여자</label>
+                        </div>
+                    </div>
+                    <small class="text-danger" th:if="${errorMap != null and errorMap.containsKey('gender')}" th:text="${errorMap.get('gender')}"></small>
+                </div>
+                <div class="form-group">
+                    <label for="birth">생년월일</label>
+                    <input type="date" id="birth" th:field="*{birth}" class="form-control" th:value="${#dates.format(memberFormDto.birth, 'yyyy-MM-dd')}" />
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">한줄소개</label>
+                    <textarea id="bio" th:field="*{bio}" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-edit">수정 완료</button>
             </form>
         </div>
     </div>
 </div>
+
+</body>
+</html>

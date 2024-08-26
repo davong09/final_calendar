@@ -13,7 +13,10 @@
         <result property="name" column="name"/>
         <result property="password" column="password"/>
         <result property="gender" column="gender"/>
+        <result property="image" column="image"/>
         <result property="birth" column="birth"/>
+        <result property="bio" column="bio"/>
+        <result property="social" column="social"/>
         <collection property="roles" ofType="com.javalab.calendar.vo.Role" resultMap="roleResultMap"/>
     </resultMap>
 
@@ -75,8 +78,8 @@
 
     <!-- 새로운 회원 저장 -->
     <insert id="save" parameterType="MemberVo">
-        INSERT INTO member (member_id, password, name, email, birth, gender, image, bio, social, code_id)
-        VALUES (#{memberId}, #{password}, #{name}, #{email}, #{birth}, #{gender}, #{image}, #{bio}, #{social}, seq_code_id.nextval)
+        INSERT INTO member (member_id, password, name, email, birth, gender, image, bio, code_id)
+        VALUES (#{memberId}, #{password}, #{name}, #{email}, #{birth}, #{gender}, null, #{bio}, seq_code_id.nextval)
     </insert>
 
     <!-- 회원의 역할 저장 -->
@@ -92,17 +95,23 @@
         password = #{password},
         name = #{name},
         email = #{email},
-        birth = #{birth},
         gender = #{gender},
-        img = #{img},
+        birth = #{birth},
         bio = #{bio},
         social = #{social}
         WHERE member_id = #{memberId}
     </update>
 
-    <!-- 회원 삭제 -->
-    <delete id="delete" parameterType="string">
-        DELETE FROM member WHERE member_id = #{memberId}
+    <!-- 자식 데이터 삭제 -->
+    <delete id="deleteRolesByMemberId" parameterType="String">
+        DELETE FROM member_role
+        WHERE member_id = #{memberId}
+    </delete>
+
+    <!-- 부모 데이터 삭제 -->
+    <delete id="deleteMember" parameterType="String">
+        DELETE FROM member
+        WHERE member_id = #{memberId}
     </delete>
 
     <!-- 비밀번호 및 소셜 로그인 상태 수정 -->
@@ -114,4 +123,18 @@
         WHERE email = #{email}
     </update>
 
+    <!-- 회원 상세 정보 조회 -->
+    <select id="getMember" parameterType="String" resultMap="memberMap">
+        SELECT member_id,
+        name,
+        email,
+        code_Id,
+        gender,
+        birth,
+        image,
+        bio,
+        social
+        FROM member
+        WHERE member_id = #{member_id}
+    </select>
 </mapper>

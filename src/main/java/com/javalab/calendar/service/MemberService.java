@@ -1,5 +1,6 @@
 package com.javalab.calendar.service;
 
+import com.javalab.calendar.dto.GenderRatioDTO;
 import com.javalab.calendar.dto.MemberFormDto;
 import com.javalab.calendar.vo.MemberVo;
 
@@ -26,5 +27,7 @@ public interface MemberService {
     void updateMember(MemberFormDto memberFormDto);
 
     void deleteMember(String memberId);
+
+    GenderRatioDTO getGenderRatio();
 }
 

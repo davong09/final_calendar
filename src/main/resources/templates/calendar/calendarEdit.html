@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캘린더 수정</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container form-container">
+    <h1>캘린더 수정</h1>
+    <form action="/calendar/edit.do" method="post">
+        <div class="form-group">
+            <label for="calen_name">제목</label>
+            <input type="text" class="form-control" id="calen_name" name="calen_name" value="${calendar.calen_name}" required>
+        </div>
+        <div class="form-group">
+            <label for="calen_detail">상세</label>
+            <textarea class="form-control" id="calen_detail" name="calen_detail" rows="3" required>${calendar.calen_detail}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="calen_color">색상</label>
+            <input type="text" class="form-control" id="calen_color" name="calen_color" value="${calendar.calen_color}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">수정하기</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+
+<head>
+    <title layout:fragment="title">회원 성별 통계</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+
+        .bar-chart {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 300px;
+            margin-top: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .bar {
+            width: 45%;
+            text-align: center;
+            font-weight: bold;
+            color: #fff; /* 텍스트 색상 */
+            position: relative;
+            border-radius: 5px;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
+        }
+
+        .bar.male {
+            background-color: #3498db;
+            height: [[${genderRatio.malePercentage}]]%;
+        }
+
+        .bar.female {
+            background-color: #e74c3c;
+            height: [[${genderRatio.femalePercentage}]]%;
+        }
+
+        .bar div {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 3px 6px;
+            border-radius: 3px;
+        }
+
+        .label-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .label {
+            font-size: 18px;
+            color: #333;
+            margin: 0 20px;
+            font-weight: bold;
+        }
+
+        .label.male {
+            color: #3498db;
+        }
+
+        .label.female {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+
+<div layout:fragment="content">
+    <div class="container">
+        <h3 layout:fragment="body-title">회원 성별 통계</h3>
+        <div class="bar-chart">
+            <div class="bar male">
+                <div>[[${genderRatio.malePercentage}]]%</div>
+            </div>
+            <div class="bar female">
+                <div>[[${genderRatio.femalePercentage}]]%</div>
+            </div>
+        </div>
+        <div class="label-container">
+            <div class="label male">Male</div>
+            <div class="label female">Female</div>
+        </div>
+    </div>
+</div>
+
+<!-- Optionally include Bootstrap JavaScript for additional functionality -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</html>

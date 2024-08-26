@@ -81,4 +81,8 @@ public class CustomUser extends User implements OAuth2User, Serializable {
         return this.attributes;
     }
 
+    // MemberVo를 직접 가져오는 메서드 추가
+    public MemberVo getMemberVo() {
+        return this.memberVo;
+    }
 }

@@ -1,8 +1,10 @@
 package com.javalab.calendar.controller;
 
 import com.javalab.calendar.dto.CustomUser;
+import com.javalab.calendar.dto.GenderRatioDTO;
 import com.javalab.calendar.dto.MemberFormDto;
 import com.javalab.calendar.service.MemberService;
+import com.javalab.calendar.service.UserService;
 import com.javalab.calendar.vo.MemberVo;
 import com.javalab.calendar.vo.Role;
 import jakarta.validation.Valid;
@@ -26,6 +28,7 @@ import java.util.Map;
 @Log4j2
 public class MemberController {
 
+    private final UserService userService;
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
@@ -37,12 +40,21 @@ public class MemberController {
         return "member/memberList"; // Thymeleaf 뷰의 이름, 위의 HTML 파일에 해당
     }
 
+    // 회원 성비 통계 조회
+    @GetMapping("/statistics.do")
+    public String getStatistics(Model model) {
+        GenderRatioDTO genderRatio = userService.getGenderRatio();
+        model.addAttribute("genderRatio", genderRatio);
+        return "member/statistics"; // 성비 통계 페이지
+    }
+
     // 회원 가입 화면
     @GetMapping(value = "/join.do")
     public String memberForm(Model model){
         if (!model.containsAttribute("memberFormDto")) {
             model.addAttribute("memberFormDto", new MemberFormDto());
         }
+        log.info("getmapping에서 membercreate.html 불러옴");
         return "member/memberCreate";
     }
 
@@ -50,17 +62,19 @@ public class MemberController {
      * 회원 가입 처리
      */
     @PostMapping("/join.do")
-    public String registerMember(@Valid @ModelAttribute("memberFormDto") MemberFormDto memberFormDto,
+    public String save(@Valid @ModelAttribute("memberFormDto") MemberFormDto memberFormDto,
                                  BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             log.info("회원가입 데이터 검증 오류 있음");
+            log.info(memberFormDto);
 
             Map<String, String> errorMap = new HashMap<>();
             bindingResult.getFieldErrors().forEach(error ->
                     errorMap.put(error.getField(), error.getDefaultMessage())
             );
+            log.info(errorMap);
             redirectAttributes.addFlashAttribute("errorMap", errorMap);
             redirectAttributes.addFlashAttribute("memberFormDto", memberFormDto);
             return "redirect:/member/join.do";
@@ -73,15 +87,19 @@ public class MemberController {
             role.setRoleName("ROLE_USER"); // 기본 권한 설정
 
             MemberVo member = MemberVo.builder()
-                    .memberId(memberFormDto.getEmail()) // 이메일을 memberId로 사용
+                    .memberId(memberFormDto.getMemberId()) // 이메일을 memberId로 사용
                     .password(passwordEncoder.encode(memberFormDto.getPassword()))
                     .name(memberFormDto.getName())
                     .email(memberFormDto.getEmail())
+                    .gender(memberFormDto.getGender())
+                    .birth(memberFormDto.getBirth())
+                    .bio(memberFormDto.getBio())
                     // 권한은 기본 권한으로 빌더패턴으로 생성
                     .roles(List.of(role))
                     .build();
 
             memberService.saveMemberWithRole(member);
+            log.info(memberFormDto);
         } catch (IllegalStateException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/member/join.do";
@@ -96,20 +114,28 @@ public class MemberController {
     @GetMapping("/update.do/{memberId}")
     public String updateForm(@PathVariable("memberId") String memberId, Model model) {
         // 처음 수정화면으로 온 경우와 수정 Post 메소드에서 온 경우 분리
+        log.info("update.do get까지는 온듯");
         if (!model.containsAttribute("memberFormDto")) {
             MemberVo memberVo = memberService.findMemberById(memberId);
             if (memberVo != null) {
                 MemberFormDto memberFormDto = new MemberFormDto();
                 memberFormDto.setMemberId(memberVo.getMemberId());
+                memberFormDto.setPassword(memberVo.getPassword());
                 memberFormDto.setName(memberVo.getName());
                 memberFormDto.setEmail(memberVo.getEmail());
+                memberFormDto.setGender(memberVo.getGender());
+                memberFormDto.setBirth(memberVo.getBirth());
+                memberFormDto.setBio(memberVo.getBio());
+                log.info("memberFormDto:" + memberFormDto);
                 // 필요한 필드를 더 설정합니다.
 
                 model.addAttribute("memberFormDto", memberFormDto);
             } else {
-                return "redirect:/member/list.do"; // 존재하지 않는 회원의 경우 리다이렉트
+                log.info("mypage로 이동하게 하는건가?");
+                return "redirect:/mypage/mypagemain"; // 존재하지 않는 회원의 경우 리다이렉트
             }
         }
+        log.info("수정폼으로 안 가는건가?");
         return "member/memberUpdate"; // 수정 폼 페이지로 이동
     }
 
@@ -121,6 +147,7 @@ public class MemberController {
                          @ModelAttribute("memberFormDto") @Valid MemberFormDto memberFormDto,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
+        log.info("update.do poast까지도 오는데 왜?");
         log.info("memberFormDto: {}", memberFormDto);
 
         // 필드 오류 메시지를 플래시 속성에 추가
@@ -139,8 +166,9 @@ public class MemberController {
 
         memberFormDto.setMemberId(memberId);
         memberService.updateMember(memberFormDto);
-
-        return "redirect:/member/profile.do"; // 회원 정보 페이지 등으로 리다이렉트할 URL
+        log.info("memberForm" + memberFormDto);
+        log.info("mypage로 이동이 안 되는건가?");
+        return "redirect:mypage/mypagemain"; // 회원 정보 페이지 등으로 리다이렉트할 URL
     }
 
 
@@ -167,5 +195,23 @@ public class MemberController {
 
         redirectAttributes.addFlashAttribute("result", "비밀번호 변경 성공");
         return "redirect:/"; // 비밀번호 변경 후 리다이렉트할 URL을 선택합니다.
+    }
+
+    /**
+     * 로그인한 사용자 자신의 계정을 삭제하는 메소드
+     */
+    @PostMapping("/delete")
+    public String deleteMember(@AuthenticationPrincipal CustomUser customUser, RedirectAttributes redirectAttributes) {
+        String memberId = customUser.getUsername(); // 현재 로그인한 사용자의 ID 가져오기
+        log.info("Deleting member with ID: {}", memberId);
+
+        // 회원 삭제
+        memberService.deleteMember(memberId);
+
+        // 로그아웃 처리 등 후속 작업 필요
+        redirectAttributes.addFlashAttribute("message", "계정이 성공적으로 삭제되었습니다.");
+
+        // 삭제 후 로그아웃 및 홈 페이지로 리다이렉트
+        return "redirect:/member/logout.do";
     }
 }

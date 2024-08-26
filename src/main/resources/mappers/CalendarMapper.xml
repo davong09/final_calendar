@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.javalab.calendar.repository.CalendarMapper">
+    <!-- @author sujin-->
+    <!-- 일정 추가 -->
+    <insert id="addEvent" parameterType="com.javalab.calendar.vo.CalendarVo">
+        INSERT INTO event (
+        calen_id,
+        member_id,
+        calen_name,
+        calen_detail,
+        calen_color,
+        calen_create,
+        calen_update
+        )
+        VALUES (
+        event_seq.nextval, -- SEQUENCE를 사용하여 calen_id를 자동으로 생성
+        #{memberId},
+        #{calenName},
+        #{calenDetail},
+        #{calenColor},
+        #{calenCreate},
+        #{calenUpdate}
+        )
+    </insert>
+
+    <!-- 모든 일정 조회 -->
+    <select id="getAllEvent" resultType="com.javalab.calendar.vo.CalendarVo">
+        SELECT * FROM events
+    </select>
+
+    <!-- 특정 일정 조회 -->
+    <select id="getEventById" parameterType="int" resultType="com.javalab.calendar.vo.CalendarVo">
+        SELECT * FROM events WHERE calen_id = #{id}
+    </select>
+
+    <!-- 일정 업데이트 -->
+    <update id="updateEvent" parameterType="com.javalab.calendar.vo.CalendarVo">
+        UPDATE event
+        SET
+        calen_name = #{calenName},
+        calen_detail = #{calenDetail},
+        calen_color = #{calenColor},
+        calen_create = #{calenCreate},
+        calen_update = #{calenUpdate}
+        WHERE calen_id = #{calenId}
+    </update>
+
+    <!-- 일정 삭제 -->
+    <delete id="deleteEvent" parameterType="int">
+        DELETE FROM event WHERE calen_id = #{id}
+    </delete>
+
+    <!-- 사용자별 일정 조회 -->
+    <select id="getEventsByUsername" parameterType="String" resultType="com.javalab.calendar.vo.CalendarVo">
+        SELECT * FROM event WHERE member_id = #{memberId}
+    </select>
+
+</mapper>
