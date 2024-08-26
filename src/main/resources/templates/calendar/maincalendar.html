@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="kr" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<!-- @author sujin-->
+<html lang="kr" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>FullCalendar with Spring Boot</title>
@@ -101,6 +102,9 @@
         <a class="nav-link">
             <span th:text="${#authentication.principal.name}">이름</span>
             님의 캘린더
+        </a>
+        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/mypage/detail.do/{memberId}(memberId=${memberVo.memberId})}">
+            마이페이지
         </a>
         <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/mypage/detail.do/{memberId}(memberId=${memberVo.memberId})}">
             마이페이지
