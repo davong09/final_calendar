@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일정 삭제</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<form id="deleteForm">
+    <div class="form-group">
+        <label for="deleteEventId">삭제할 일정 ID</label>
+        <input type="text" class="form-control" id="deleteEventId" required>
+    </div>
+    <button type="button" class="btn btn-danger" id="deleteButton">삭제</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById("deleteButton").addEventListener("click", function () {
+        const eventId = document.getElementById("deleteEventId").value;
+
+        fetch('/api/deleteSchedule', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                eventId: eventId
+            }),
+        }).then(response => response.json())
+          .then(data => {
+              console.log('일정 삭제 성공:', data);
+              $('#deleteModal').modal('hide');
+          }).catch(error => {
+              console.error('일정 삭제 실패:', error);
+          });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.javalab.calendar.mapper.EventMapper">
+
+    <!-- 이벤트 추가 -->
+    <insert id="createEvent" parameterType="com.javalab.calendar.vo.EventVo">
+        INSERT INTO EVENT (
+        title, location, start_date, end_date, memo, all_day, publice
+        ) VALUES (
+        #{title}, #{location}, #{startDate}, #{endDate}, #{memo}, #{allDay}, #{publice}
+        )
+    </insert>
+
+    <!-- 모든 이벤트 조회 -->
+    <select id="getAllEvents" resultType="com.javalab.calendar.vo.EventVo">
+        SELECT * FROM EVENT
+    </select>
+
+    <!-- 특정 ID로 이벤트 조회 -->
+    <select id="getEventById" parameterType="int" resultType="com.javalab.calendar.vo.EventVo">
+        SELECT * FROM EVENT WHERE event_id = #{id}
+    </select>
+
+    <!-- 이벤트 업데이트 -->
+    <update id="updateEvent" parameterType="com.javalab.calendar.vo.EventVo">
+        UPDATE EVENT
+        SET
+        title = #{title},
+        location = #{location},
+        start_date = #{startDate},
+        end_date = #{endDate},
+        memo = #{memo},
+        all_day = #{allDay},
+        publice = #{publice}
+        WHERE event_id = #{eventId}
+    </update>
+
+    <!-- 이벤트 삭제 -->
+    <delete id="deleteEvent" parameterType="int">
+        DELETE FROM EVENT WHERE event_id = #{id}
+    </delete>
+
+</mapper>

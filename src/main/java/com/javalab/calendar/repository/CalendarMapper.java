@@ -1,14 +1,17 @@
-package com.javalab.calendar.service;
+package com.javalab.calendar.repository;
 
 import com.javalab.calendar.vo.CalendarVo;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface CalendarService {
+@Mapper
+public interface CalendarMapper {
     void addEvent(CalendarVo calendarVo);
     List<CalendarVo> getAllEvents();
     CalendarVo getEventById(int id);
     void updateEvent(CalendarVo calendarVo);
     void deleteEvent(int id);
-    List<CalendarVo> getEventsByUsername(String username); // 사용자가 등록한 일정만 가져오기
+    List<CalendarVo> getEventsByUsername(@Param("memberId") String memberId);
 }

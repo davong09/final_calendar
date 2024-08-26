@@ -56,7 +56,6 @@ CREATE TABLE notification (
 CREATE TABLE calender (
     calen_ID    NUMBER        NOT NULL,
     member_id    VARCHAR2(50)        NOT NULL,
-    event_id    NUMBER        NOT NULL,
     calen_name    VARCHAR2(100)        NOT NULL,
     calen_detail    VARCHAR2(500)        NOT NULL,
     calen_color    VARCHAR2(20)        NULL,

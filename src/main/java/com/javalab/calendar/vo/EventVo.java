@@ -12,11 +12,11 @@ import org.springframework.format.annotation.DateTimeFormat;
  * - EventVo: 데이터베이스의 EVENT 테이블과 매핑되는 객체
  * - 데이터베이스의 상태를 그대로 반영하며, 이를 통해 데이터베이스로부터 데이터를 읽거나 쓸 수 있음
  */
-@AllArgsConstructor // 모든 필드를 파라미터로 받는 생성자 생성
-@NoArgsConstructor  // 파라미터 없는 기본 생성자 생성
-@Getter @Setter     // 각 필드에 대한 getter와 setter 메서드 생성
-@ToString           // toString 메서드 자동 생성
-@Builder            // 빌더 패턴 구현
+@AllArgsConstructor  // 모든 필드를 파라미터로 받는 생성자 생성
+@NoArgsConstructor   // 파라미터 없는 기본 생성자 생성
+@Getter @Setter      // 각 필드에 대한 getter와 setter 메서드 생성
+@ToString            // toString 메서드 자동 생성
+@Builder             // 빌더 패턴 구현
 public class EventVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
