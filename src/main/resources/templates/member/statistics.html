@@ -1,84 +1,170 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>회원 성별 통계</title>
-    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <title layout:fragment="title">회원 통계</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .container {
-            width: 50%;
-            margin: auto;
-            text-align: center;
+            margin-top: 20px;
         }
 
         .bar-chart {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: flex-end;
             height: 300px;
-            padding: 20px;
             margin-top: 30px;
             border: 1px solid #ccc;
             border-radius: 10px;
             background-color: #f9f9f9;
-            position: relative;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .bar {
-            width: 30%;
+            width: 45%;
             text-align: center;
             font-weight: bold;
-            color: #000; /* 퍼센트 표시 색상 */
+            color: #fff;
             position: relative;
+            border-radius: 5px;
+            margin: 0 2%;
+            transition: opacity 0.3s ease;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
         }
 
         .bar.male {
             background-color: #3498db;
-            height: [[${genderRatio.malePercentage}]]%;
         }
 
         .bar.female {
             background-color: #e74c3c;
-            height: [[${genderRatio.femalePercentage}]]%;
         }
 
-        /* 퍼센트 값 막대 하단에 고정 */
         .bar div {
             position: absolute;
-            bottom: -25px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 3px 6px;
+            border-radius: 3px;
         }
 
         .label-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             margin-top: 10px;
         }
 
         .label {
             font-size: 18px;
             color: #333;
+            margin: 0 20px;
+            font-weight: bold;
+        }
+
+        .label.male {
+            color: #3498db;
+        }
+
+        .label.female {
+            color: #e74c3c;
+        }
+
+        /* 나이대 통계 스타일 */
+        .age-chart {
+            margin-top: 40px;
+        }
+
+        .age-bar {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
+            position: relative;
+            border-radius: 5px;
+            margin: 0 1%;
+            background-color: #8e44ad;
+        }
+
+        .age-bar div {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 3px 6px;
+            border-radius: 3px;
+        }
+
+        .age-label-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .age-label {
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
         }
     </style>
 </head>
-<body>
-<div class="container">
-    <h2>회원 성별 통계</h2>
-    <div class="bar-chart">
-        <div class="bar male">
-            <div>[[${genderRatio.malePercentage}]]%</div>
+
+<div layout:fragment="content">
+    <div class="container">
+        <h3 layout:fragment="body-title">회원 통계</h3>
+
+        <!-- 성별 통계 -->
+        <h4>성별 통계</h4>
+        <div class="bar-chart">
+            <div class="bar male" th:style="'height: ' + ${genderRatio.malePercentage} + '%'">
+                <div th:text="${genderRatio.malePercentage} + '%'"></div>
+            </div>
+            <div class="bar female" th:style="'height: ' + ${genderRatio.femalePercentage} + '%'">
+                <div th:text="${genderRatio.femalePercentage} + '%'"></div>
+            </div>
         </div>
-        <div class="bar female">
-            <div>[[${genderRatio.femalePercentage}]]%</div>
+        <div class="label-container">
+            <div class="label male">Male</div>
+            <div class="label female">Female</div>
         </div>
-    </div>
-    <!-- 레이블을 막대 아래에 배치 -->
-    <div class="label-container">
-        <div class="label" style="color: #3498db;">Male</div>
-        <div class="label" style="color: #e74c3c;">Female</div>
+
+        <!-- 나이대 통계 -->
+        <h4 class="age-chart">나이대 통계</h4>
+        <div class="bar-chart">
+            <div class="age-bar" th:each="ageGroup, iterStat : ${ageStatistics.ageGroups}"
+                 th:style="'height: ' + ${ageGroup} + '%'">
+                <div th:text="${ageStatistics.ageGroupPercentages[iterStat.index]} + '%'"></div>
+            </div>
+        </div>
+        <div class="age-label-container">
+            <div class="age-label">10대 이하</div>
+            <div class="age-label">10대</div>
+            <div class="age-label">20대</div>
+            <div class="age-label">30대</div>
+            <div class="age-label">40대</div>
+            <div class="age-label">50대 이상</div>
+        </div>
     </div>
 </div>
-</body>
+
+<!-- Optionally include Bootstrap JavaScript for additional functionality -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </html>
