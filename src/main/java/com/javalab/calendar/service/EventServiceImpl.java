@@ -2,24 +2,21 @@ package com.javalab.calendar.service;
 
 import com.javalab.calendar.repository.EventMapper;
 import com.javalab.calendar.vo.EventVo;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-@Transactional
-@Slf4j
 public class EventServiceImpl implements EventService {
 
-	private final EventMapper eventMapper;
+	@Autowired
+	private EventMapper eventMapper;
 
 	@Override
-	public EventVo getEvent(int event_id) {
-		return eventMapper.getEvent(event_id);
+	public EventVo getEvent(int eventId) {
+		return eventMapper.getEvent(eventId);
 	}
 
 	@Override
@@ -28,17 +25,27 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public int createEvent(EventVo eventVo) {
-		return eventMapper.createEvent(eventVo);
+	public void createEvent(EventVo eventVo) {
+		eventMapper.createEvent(eventVo);
 	}
 
 	@Override
-	public int updateEvent(EventVo eventVo) {
-		return eventMapper.updateEvent(eventVo);
+	public void updateEvent(EventVo eventVo) {
+		eventMapper.updateEvent(eventVo);
 	}
 
 	@Override
-	public int deleteEvent(int event_id) {
-		return eventMapper.deleteEvent(event_id);
+	public void deleteEvent(int eventId) {
+		eventMapper.deleteEvent(eventId);
+	}
+
+	@Override
+	public List<EventVo> findEventsByMonth(String memberId, String startDate, LocalDate endDate) {
+		return eventMapper.findEventsByMonth(memberId, startDate, String.valueOf(endDate));
+	}
+
+	@Override
+	public List<EventVo> getEventsByMonth(String memberId, String month) {
+		return List.of();
 	}
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.javalab.calendar.repository.EventMapper">
+
+    <!-- 사용자 ID로 캘린더 정보 가져오기 -->
+    <select id="findByMemberId" parameterType="string" resultType="com.javalab.calendar.vo.CalendarVo">
+        SELECT *
+        FROM calendars
+        WHERE member_id = #{memberId}
+    </select>
+
+    <!-- 캘린더 이벤트 업데이트 -->
+    <update id="update" parameterType="com.javalab.calendar.vo.CalendarVo">
+        UPDATE calendars
+        SET calen_name = #{calen_name},
+        calen_detail = #{calen_detail},
+        calen_color = #{calen_color},
+        calen_update = NOW()
+        WHERE calen_id = #{calenId}
+    </update>
+
+    <!-- 새로운 일정 저장 -->
+    <insert id="saveEvent" parameterType="com.javalab.calendar.vo.CalendarVo">
+        INSERT INTO calendars (member_id, calen_name, calen_detail, calen_color, calen_create, calen_update)
+        VALUES (#{memberId}, #{calen_name}, #{calen_detail}, #{calen_color}, NOW(), NOW())
+    </insert>
+
+    <!-- 특정 월의 일정 목록 가져오기 -->
+    <select id="findEventsByMonth" parameterType="map" resultType="com.javalab.calendar.vo.CalendarVo">
+        SELECT *
+        FROM calendars
+        WHERE member_id = #{memberId}
+        AND DATE_FORMAT(calen_create, '%Y-%m') = #{month}
+    </select>
+</mapper>
