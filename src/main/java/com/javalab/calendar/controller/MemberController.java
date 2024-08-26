@@ -103,6 +103,7 @@ public class MemberController {
     @GetMapping("/update.do/{memberId}")
     public String updateForm(@PathVariable("memberId") String memberId, Model model) {
         // 처음 수정화면으로 온 경우와 수정 Post 메소드에서 온 경우 분리
+        log.info("update.do get까지는 온듯");
         if (!model.containsAttribute("memberFormDto")) {
             MemberVo memberVo = memberService.findMemberById(memberId);
             if (memberVo != null) {
@@ -114,13 +115,16 @@ public class MemberController {
                 memberFormDto.setGender(memberVo.getGender());
                 memberFormDto.setBirth(memberVo.getBirth());
                 memberFormDto.setBio(memberVo.getBio());
+                log.info("memberFormDto:" + memberFormDto);
                 // 필요한 필드를 더 설정합니다.
 
                 model.addAttribute("memberFormDto", memberFormDto);
             } else {
-                return "redirect:mypage/mypagemain"; // 존재하지 않는 회원의 경우 리다이렉트
+                log.info("mypage로 이동하게 하는건가?");
+                return "redirect:/mypage/mypagemain"; // 존재하지 않는 회원의 경우 리다이렉트
             }
         }
+        log.info("수정폼으로 안 가는건가?");
         return "member/memberUpdate"; // 수정 폼 페이지로 이동
     }
 
@@ -132,6 +136,7 @@ public class MemberController {
                          @ModelAttribute("memberFormDto") @Valid MemberFormDto memberFormDto,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
+        log.info("update.do poast까지도 오는데 왜?");
         log.info("memberFormDto: {}", memberFormDto);
 
         // 필드 오류 메시지를 플래시 속성에 추가
@@ -151,7 +156,7 @@ public class MemberController {
         memberFormDto.setMemberId(memberId);
         memberService.updateMember(memberFormDto);
 
-        return "redirect:/member/profile.do"; // 회원 정보 페이지 등으로 리다이렉트할 URL
+        return "redirect:/mypage/mypagemain"; // 회원 정보 페이지 등으로 리다이렉트할 URL
     }
 
 

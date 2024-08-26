@@ -131,7 +131,7 @@
 </head>
 <body>
 <nav class="navbar navbar-light bg-light">
-    <a class="nav-link">DoFriend</a> <!-- maincalendar로 다시 오게끔 -->
+    <a class="nav-link" th:href="@{/maincalendar}">DoFriend</a> <!-- maincalendar로 다시 오게끔 -->
     <a class="nav-link">
         <span th:text="${#authentication.principal.name}">이름</span>님의 정보
     </a>
