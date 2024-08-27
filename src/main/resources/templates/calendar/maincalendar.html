@@ -12,16 +12,24 @@
             max-width: 1000px;
             margin: 0 auto;
         }
+
         .fc-toolbar {
-            background-color: #FFCCFF;
+            background-color: #5563DE; /* 파란색으로 변경 */
         }
+
+        .fc-toolbar-title {
+            color: #ffffff; /* 글씨 색상 흰색으로 변경 */
+        }
+
         .fc-daygrid-day {
             background-color: #ffffff;
             border: 1px solid #dee2e6;
         }
+
         .fc-daygrid-day-number {
             color: #343a40;
         }
+
         .fc-event {
             background-color: #007bff;
             border-color: #007bff;
@@ -37,7 +45,25 @@
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 locale: 'ko',
                 initialView: 'dayGridMonth',
-                events: '/api/events',  // 서버에서 이벤트 목록을 가져옴
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    $.ajax({
+                        url: '/api/user-events',
+                        method: 'GET',
+                        success: function (data) {
+                            const events = data.map(event => ({
+                                id: event.eventId,
+                                title: event.title,
+                                start: event.startDate,
+                                end: event.endDate
+                            }));
+                            successCallback(events);
+                        },
+                        error: function () {
+                            alert('이벤트 데이터를 가져오는 데 실패했습니다.');
+                            failureCallback();
+                        }
+                    });
+                },
                 dateClick: function (info) {
                     $('#eventstartDate').val(info.dateStr);
                     $('#eventendDate').val(info.dateStr);
@@ -45,7 +71,7 @@
                 },
                 eventClick: function (info) {
                     $.ajax({
-                        url: `/api/events/${info.event.id}`,
+                        url: `/api/user-events/${info.event.id}`,
                         method: 'GET',
                         success: function (response) {
                             $('#eventDetailTitle').text(response.title);
@@ -63,30 +89,29 @@
             calendar.render();
 
             window.addEvent = function () {
-            debugger;
                 const csrfToken = $('meta[name="_csrf"]').attr('content');
                 const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
 
                 const title = $('#eventTitle').val();
                 const startDate = $('#eventstartDate').val();
                 const endDate = $('#eventendDate').val();
-                const content = $('#eventcontent').val();
-                const member = $('#eventmember').val();
-                const location = $('#eventlocation').val();
+                const memo = $('#eventMemo').val();
+                const location = $('#eventLocation').val();
 
                 $.ajax({
-                    url: '/api/events/create',
+                    url: '/api/user-events/create',
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({
                         title: title,
                         startDate: startDate,
                         endDate: endDate,
-                        content: content,
-                        member: member,
-                        location: location
+                        memo: memo,
+                        location: location,
+                        allDay: 0,
+                        publice: 1
                     }),
-                    beforeSend: function(xhr) {
+                    beforeSend: function (xhr) {
                         xhr.setRequestHeader(csrfHeader, csrfToken);
                     },
                     success: function (response) {
@@ -107,7 +132,7 @@
 <form action="/maincalendar" method="post">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <nav class="navbar navbar-light bg-light">
-        <a class="nave-link">DoFriend</a> <!-- maincalendar로 다시 오게끔 -->
+        <a class="nave-link">DoFriend</a>
         <a class="nav-link">
             <span th:text="${#authentication.principal.name}">이름</span>
             님의 캘린더
@@ -150,16 +175,12 @@
                             <input type="date" class="form-control" id="eventendDate" required>
                         </div>
                         <div class="form-group">
-                            <label for="eventcontent">일정 내용</label>
-                            <input type="text" class="form-control" id="eventcontent" required>
+                            <label for="eventMemo">일정 내용</label>
+                            <input type="text" class="form-control" id="eventMemo" required>
                         </div>
                         <div class="form-group">
-                            <label for="eventmember">참석자</label>
-                            <input type="text" class="form-control" id="eventmember" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="eventlocation">장소</label>
-                            <input type="text" class="form-control" id="eventlocation" required>
+                            <label for="eventLocation">장소</label>
+                            <input type="text" class="form-control" id="eventLocation" required>
                         </div>
                     </form>
                 </div>
