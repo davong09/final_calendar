@@ -1,47 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.javalab.calendar.mapper.EventMapper">
-
-<!-- @author sujin-->
-
-    <!-- 이벤트 추가 -->
-    <insert id="createEvent" parameterType="com.javalab.calendar.vo.EventVo">
-        INSERT INTO EVENT (
-        title, location, start_date, end_date, memo, all_day, publice
-        ) VALUES (
-        #{title}, #{location}, #{startDate}, #{endDate}, #{memo}, #{allDay}, #{publice}
-        )
-    </insert>
+<mapper namespace="com.javalab.calendar.repository.EventMapper">
 
     <!-- 모든 이벤트 조회 -->
-    <select id="getAllEvents" resultType="com.javalab.calendar.vo.EventVo">
-        SELECT * FROM EVENT
+    <select id="findAllEvents" resultType="EventVo">
+        SELECT * FROM event
     </select>
 
-    <!-- 특정 ID로 이벤트 조회 -->
-    <select id="getEventById" parameterType="int" resultType="com.javalab.calendar.vo.EventVo">
-        SELECT * FROM EVENT WHERE event_id = #{id}
+    <!-- 특정 이벤트 조회 -->
+    <select id="findEventById" parameterType="int" resultType="com.javalab.calendar.vo.EventVo">
+        SELECT * FROM event WHERE event_id = #{eventId}
     </select>
+
+    <!-- 이벤트 삽입 -->
+    <insert id="insertEvent" parameterType="EventVo">
+        INSERT INTO event (event_id, title, category_id, start_date, end_date, memo, location, publice, member_id)
+        VALUES (seq_event_id.nextval, #{title}, #{categoryId}, #{startDate}, #{endDate}, #{memo}, #{location}, #{publice}, #{memberId})
+    </insert>
 
     <!-- 이벤트 업데이트 -->
     <update id="updateEvent" parameterType="com.javalab.calendar.vo.EventVo">
-        UPDATE EVENT
-        SET
-        title = #{title},
-        location = #{location},
-        start_date = #{startDate},
-        end_date = #{endDate},
-        memo = #{memo},
-        all_day = #{allDay},
-        publice = #{publice}
+        UPDATE event
+        SET title = #{title}, category_id = #{categoryId}, start_date = #{startDate}, end_date = #{endDate},
+        memo = #{memo}, location = #{location}, all_day = #{allDay}, publice = #{publice}
         WHERE event_id = #{eventId}
     </update>
 
     <!-- 이벤트 삭제 -->
     <delete id="deleteEvent" parameterType="int">
-        DELETE FROM EVENT WHERE event_id = #{id}
+        DELETE FROM event WHERE event_id = #{eventId}
     </delete>
 
 </mapper>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<!-- @author sujin-->
 <html lang="kr" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" content="${_csrf.token}">
+    <meta name="_csrf_header" content="${_csrf.headerName}">
     <title>FullCalendar with Spring Boot</title>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet"/>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
@@ -36,21 +37,19 @@
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 locale: 'ko',
                 initialView: 'dayGridMonth',
-                events: '/events',  // 서버에서 이벤트 목록을 가져옴
+                events: '/api/events',  // 서버에서 이벤트 목록을 가져옴
                 dateClick: function (info) {
                     $('#eventstartDate').val(info.dateStr);
                     $('#eventendDate').val(info.dateStr);
                     $('#eventModal').modal('show');
                 },
                 eventClick: function (info) {
-                    // 이벤트 클릭 시 호출될 함수
                     $.ajax({
-                        url: `/events/${info.event.id}`,
+                        url: `/api/events/${info.event.id}`,
                         method: 'GET',
                         success: function (response) {
-                            // 받아온 데이터를 모달에 채우기
                             $('#eventDetailTitle').text(response.title);
-                            $('#eventDetailDate').text(response.start_date + ' ~ ' + response.end_date);
+                            $('#eventDetailDate').text(response.startDate + ' ~ ' + response.endDate);
                             $('#eventDetailLocation').text(response.location);
                             $('#eventDetailMemo').text(response.memo);
                             $('#eventDetailModal').modal('show');
@@ -64,6 +63,10 @@
             calendar.render();
 
             window.addEvent = function () {
+            debugger;
+                const csrfToken = $('meta[name="_csrf"]').attr('content');
+                const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
                 const title = $('#eventTitle').val();
                 const startDate = $('#eventstartDate').val();
                 const endDate = $('#eventendDate').val();
@@ -72,15 +75,19 @@
                 const location = $('#eventlocation').val();
 
                 $.ajax({
-                    url: '/events/create',
+                    url: '/api/events/create',
                     method: 'POST',
-                    data: {
+                    contentType: 'application/json',
+                    data: JSON.stringify({
                         title: title,
                         startDate: startDate,
                         endDate: endDate,
                         content: content,
                         member: member,
                         location: location
+                    }),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader(csrfHeader, csrfToken);
                     },
                     success: function (response) {
                         calendar.refetchEvents();
@@ -88,6 +95,7 @@
                         $('#eventModal').modal('hide');
                     },
                     error: function (xhr, status, error) {
+                        console.error('Error:', error);
                         alert('일정 추가에 실패했습니다. 다시 시도해 주세요.');
                     }
                 });
@@ -97,16 +105,18 @@
 </head>
 <body>
 <form action="/maincalendar" method="post">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <nav class="navbar navbar-light bg-light">
         <a class="nave-link">DoFriend</a> <!-- maincalendar로 다시 오게끔 -->
         <a class="nav-link">
             <span th:text="${#authentication.principal.name}">이름</span>
             님의 캘린더
         </a>
-        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/mypage/detail.do/{memberId}(memberId=${memberVo.memberId})}">
-            마이페이지
+        <a class="nav-link" th:href="@{/events/list}">
+            일정관리
         </a>
-        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/mypage/detail.do/{memberId}(memberId=${memberVo.memberId})}">
+        <a class="nav-link" sec:authorize="isAuthenticated()"
+           th:href="@{/mypage/detail.do/{memberId}(memberId=${memberVo.memberId})}">
             마이페이지
         </a>
         <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/member/logout.do}">
@@ -117,7 +127,8 @@
     <div id="calendar"></div>
 
     <!-- 이벤트 추가 모달 -->
-    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -161,7 +172,8 @@
     </div>
 
     <!-- 이벤트 상세보기 모달 -->
-    <div class="modal fade" id="eventDetailModal" tabindex="-1" role="dialog" aria-labelledby="eventDetailModalLabel" aria-hidden="true">
+    <div class="modal fade" id="eventDetailModal" tabindex="-1" role="dialog" aria-labelledby="eventDetailModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -182,7 +194,6 @@
             </div>
         </div>
     </div>
-
 </form>
 </body>
 </html>

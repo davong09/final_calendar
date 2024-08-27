@@ -94,7 +94,9 @@ public class SecurityConfig {
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler(accessDeniedHandler())
                 )
-                //.csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf  // CSRF 보호 활성화
+                        .ignoringRequestMatchers("/api/**") // 특정 경로에 대해 CSRF 보호를 비활성화 할 수 있습니다.
+                )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/member/login.do")
                         .successHandler(authenticationSuccessHandler())

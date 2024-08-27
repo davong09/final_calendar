@@ -2,6 +2,7 @@ package com.javalab.calendar.controller;
 
 import com.javalab.calendar.service.CalendarService;
 import com.javalab.calendar.vo.CalendarVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/calendar")
+@Slf4j
 public class CalendarController {
 
     @Autowired
@@ -28,6 +30,7 @@ public class CalendarController {
         // 현재 로그인한 사용자 정보를 가져옵니다.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String memberId = authentication.getName();
+        log.info("수진이가 작성한걸로 옴!");
 
         // 사용자 이름을 모델에 추가하여 Thymeleaf 템플릿으로 전달합니다.
         model.addAttribute("memberId", memberId);

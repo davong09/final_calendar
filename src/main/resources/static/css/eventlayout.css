@@ -1,0 +1,95 @@
+/* eventlayout.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f8fb;
+    margin: 0;
+    padding: 0;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    margin-bottom: 0;
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 10px;
+}
+
+.navbar .navbar-brand {
+    color: #48d1cc !important;
+    font-weight: bold;
+}
+
+.navbar .nav-link {
+    color: #ffffff !important;
+    margin-left: 10px;
+}
+
+.navbar .nav-link:hover {
+    color: #e0e0e0 !important;
+    background-color: transparent;
+}
+
+.navbar .nav-link.btn {
+    border-radius: 20px;
+    padding: 8px 15px;
+}
+
+/* 사이드바 스타일 */
+.sidebar {
+    background-color: #007bff;
+    color: #ffffff;
+    height: 100vh;
+    position: fixed;
+    top: 56px; /* Adjusted for navbar height */
+    left: 0;
+    width: 200px;
+    padding-top: 20px;
+}
+
+.sidebar a {
+    color: #ffffff;
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background-color: #0056b3;
+}
+
+/* 메인 컨텐츠 스타일 */
+.container-fluid {
+    margin-left: 200px;
+    padding: 20px;
+}
+
+.content {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 버튼 스타일 */
+.btn-custom {
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-left: 10px;
+}
+
+.navbar .nav-link-name {
+    background-color: #48d1cc; /* 버튼 배경색 */
+    color: #ffffff; /* 버튼 글씨 색상 */
+    border-radius: 20px; /* 버튼 모서리 둥글게 */
+    padding: 8px 15px; /* 버튼 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    display: inline-block; /* 버튼처럼 보이게 하기 */
+    font-weight: bold; /* 텍스트 강조 */
+    transition: background-color 0.3s, color 0.3s; /* 부드러운 색상 변경 효과 */
+}
+
+.navbar .nav-link-name:hover {
+    background-color: #36b5a1; /* 마우스를 올렸을 때의 배경 색상 */
+    color: #ffffff; /* 마우스를 올렸을 때의 글씨 색상 */
+}

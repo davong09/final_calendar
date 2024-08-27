@@ -1,68 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout.html}">
+      layout:decorate="~{layout/eventlayout.html}">
 
 <head>
-    <!-- 타이틀(브라우저 탭부분) -->
-    <meta charset="utf-8" />
-    <title layout:fragment="title">게시물 목록</title>
+    <meta charset="UTF-8">
+    <title>일정 목록</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-
-<!-- boardList 만의 고유 컨텐트 부분 -->
 <div layout:fragment="content">
     <div class="container">
-        <!-- 게시물 목록 타이틀 -->
-        <h3 layout:fragment="body-title">게시물 내용</h3>
-        <div class="mt-5">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">번호</th>
-                    <th scope="col">일정 제목</th>
-                    <th scope="col">작성자</th>
-                    <th scope="col">일정 시작 날짜</th>
-                    <th scope="col">일정 종료 날짜</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="eventVo : ${eventList}">
-                    <td th:text="${eventVo.event_id}"></td>
-                    <td>
-                        <a th:href="@{/event/detail.do/{event_id}(event_id=${eventVo.event_id})}" th:text="${eventVo.title}"></a>
-                    </td>
-                    <td th:text="${eventVo.title}"></td>
-                    <td th:text="${eventVo.member_Id}"></td>
-                    <td th:text="${#dates.format(eventVo.start_date, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                    <td th:text="${#dates.format(eventVo.end_date, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="button-container">
-                <button id="homeButton" type="button" class="btn btn-primary">홈으로</button>
-                <button id="newPostButton" type="button" class="btn btn-success">새 게시물</button>
-            </div>
-        </div>
+        <h1 class="mt-4">일정 목록</h1>
+        <a th:href="@{/events/create}" class="btn btn-primary mb-3">일정 추가</a>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>제목</th>
+                <th>장소</th>
+                <th>시작 날짜</th>
+                <th>종료 날짜</th>
+                <th>공개 여부</th>
+                <th>작업</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="event : ${events}">
+                <td th:text="${event.eventId}"></td>
+                <td th:text="${event.title}"></td>
+                <td th:text="${event.location}"></td>
+                <td th:text="${event.startDate}"></td>
+                <td th:text="${event.endDate}"></td>
+                <td th:text="${event.publice == 1 ? '공개' : '비공개'}"></td>
+                <td>
+                    <a th:href="@{/events/update/{id}(id=${event.eventId})}" class="btn btn-sm btn-warning">수정</a>
+                    <a th:href="@{/events/delete/{id}(id=${event.eventId})}" class="btn btn-sm btn-danger"
+                       onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </div>
-
-<!-- 부트스트랩 JS 및 jQuery 추가 -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<script layout:fragment="script" th:inline="javascript">
-    var boardList = /*[[ ${boardList ?: 'null'} ]]*/ null;  // 엘비스 연산자
-    console.log("boardList:", boardList); // 자바스크립트 최상위 레벨에서 출력
-
-    $(document).ready(function() {
-        $("#homeButton").click(function() {
-            window.location.href = /*[[@{/event/list.do}]]*/ 'placeholder';
-        });
-
-        $("#newPostButton").click(function() {
-            window.location.href = /*[[@{/event/create.do}]]*/ 'placeholder';
-        });
-    });
-</script>
 </html>
