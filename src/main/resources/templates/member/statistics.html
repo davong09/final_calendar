@@ -25,13 +25,13 @@
         }
 
         .bar {
-            width: 45%;
+            width: 15%;
             text-align: center;
             font-weight: bold;
             color: #fff;
             position: relative;
             border-radius: 5px;
-            margin: 0 2%;
+            margin: 0 1%;
             transition: opacity 0.3s ease;
         }
 
@@ -86,14 +86,42 @@
         }
 
         .age-bar {
-            flex: 1;
+            width: 15%;
             text-align: center;
             font-weight: bold;
             color: #fff;
             position: relative;
             border-radius: 5px;
             margin: 0 1%;
-            background-color: #8e44ad;
+            transition: opacity 0.3s ease;
+        }
+
+        .age-bar:hover {
+            opacity: 0.8;
+        }
+
+        .age-bar.under-10 {
+            background-color: #1abc9c;
+        }
+
+        .age-bar.teen {
+            background-color: #3498db;
+        }
+
+        .age-bar.twenties {
+            background-color: #9b59b6;
+        }
+
+        .age-bar.thirties {
+            background-color: #e67e22;
+        }
+
+        .age-bar.forties {
+            background-color: #e74c3c;
+        }
+
+        .age-bar.fifties-and-above {
+            background-color: #34495e;
         }
 
         .age-bar div {
@@ -119,14 +147,14 @@
             color: #333;
             font-weight: bold;
             text-align: center;
-            width: 100%;
+            width: 15%;
         }
     </style>
 </head>
 
 <div layout:fragment="content">
     <div class="container">
-        <h3 layout:fragment="body-title">회원 통계</h3>
+        <h3 layout:fragment="body-title">회원 통계(총 회원 수: [[${totalMembers}]])</h3>
 
         <!-- 성별 통계 -->
         <h4>성별 통계</h4>
@@ -146,9 +174,23 @@
         <!-- 나이대 통계 -->
         <h4 class="age-chart">나이대 통계</h4>
         <div class="bar-chart">
-            <div class="age-bar" th:each="ageGroup, iterStat : ${ageStatistics.ageGroups}"
-                 th:style="'height: ' + ${ageGroup} + '%'">
-                <div th:text="${ageStatistics.ageGroupPercentages[iterStat.index]} + '%'"></div>
+            <div class="age-bar under-10" th:style="'height: ' + ${ageStatistics.ageGroupPercentages[0]} + '%'">
+                <div th:text="${ageStatistics.ageGroupPercentages[0]} + '%'"></div>
+            </div>
+            <div class="age-bar teen" th:style="'height: ' + ${ageStatistics.ageGroupPercentages[1]} + '%'">
+                <div th:text="${ageStatistics.ageGroupPercentages[1]} + '%'"></div>
+            </div>
+            <div class="age-bar twenties" th:style="'height: ' + ${ageStatistics.ageGroupPercentages[2]} + '%'">
+                <div th:text="${ageStatistics.ageGroupPercentages[2]} + '%'"></div>
+            </div>
+            <div class="age-bar thirties" th:style="'height: ' + ${ageStatistics.ageGroupPercentages[3]} + '%'">
+                <div th:text="${ageStatistics.ageGroupPercentages[3]} + '%'"></div>
+            </div>
+            <div class="age-bar forties" th:style="'height: ' + ${ageStatistics.ageGroupPercentages[4]} + '%'">
+                <div th:text="${ageStatistics.ageGroupPercentages[4]} + '%'"></div>
+            </div>
+            <div class="age-bar fifties-and-above" th:style="'height: ' + ${ageStatistics.ageGroupPercentages[5]} + '%'">
+                <div th:text="${ageStatistics.ageGroupPercentages[5]} + '%'"></div>
             </div>
         </div>
         <div class="age-label-container">

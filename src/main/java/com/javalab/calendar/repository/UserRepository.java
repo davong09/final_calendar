@@ -30,4 +30,10 @@ public class UserRepository {
         String sql = "SELECT COUNT(*) FROM member WHERE (EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM birth)) BETWEEN ? AND ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, minAge, maxAge);
     }
+
+    // 전체 회원 수를 가져오는 메소드
+    public long countTotalMembers() {
+        String sql = "SELECT COUNT(*) FROM member";
+        return jdbcTemplate.queryForObject(sql, Long.class);
+    }
 }

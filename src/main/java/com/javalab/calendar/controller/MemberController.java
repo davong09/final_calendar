@@ -45,10 +45,12 @@ public class MemberController {
     public String getStatistics(Model model) {
         GenderRatioDTO genderRatio = userService.getGenderRatio();
         UserStatisticsDTO ageStatistics = userService.getAgeStatistics(); // 나이대 통계 조회
+        long totalMembers = userService.getTotalMembers(); // 전체 회원 수 조회
 
         model.addAttribute("genderRatio", genderRatio);
         model.addAttribute("ageGroupPercentages", ageStatistics.getAgeGroupPercentages());
         model.addAttribute("ageStatistics", ageStatistics); // ageStatistics 객체를 모델에 추가
+        model.addAttribute("totalMembers", totalMembers); // 전체 회원 수를 모델에 추가
 
         return "member/statistics"; // 성비 및 나이대 통계 페이지
     }

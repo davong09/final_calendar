@@ -32,4 +32,9 @@ public class UserService {
 
         return new UserStatisticsDTO(ageGroups);
     }
+
+    // 전체 회원 수를 가져오는 메소드
+    public long getTotalMembers() {
+        return userRepository.countTotalMembers();
+    }
 }
