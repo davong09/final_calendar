@@ -149,8 +149,8 @@
         <ul>
             <li><a th:href="@{/mypage/detail.do/{memberId}(memberId=${memberVo.memberId})}">회원정보</a></li>
             <li><a th:href="@{/member/update.do/{memberId}(memberId=${memberVo.memberId})}">회원수정</a></li>
+            <li><a th:href="@{/events/list}">일정관리</a></li>
             <li><a href="#">캘린더관리</a></li>
-            <li><a href="#">일정관리</a></li>
             <li>
                 <a href="#" class="delete-link" onclick="confirmDelete(event)">회원 탈퇴</a>
             </li>
